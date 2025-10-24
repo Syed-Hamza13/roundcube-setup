@@ -31,10 +31,10 @@ services:
       PMA_HOST: mysql
       PMA_PORT: 3306
   
-    volumes:
-      - "D:/docker-volumes/phpmyadmin/config:/etc/phpmyadmin"
-      - "D:/docker-volumes/phpmyadmin/sessions:/sessions"
-      - "D:/docker-volumes/phpmyadmin/uploads:/var/www/html/upload"
+    # volumes:
+    #   - "D:/docker-volumes/phpmyadmin/config:/etc/phpmyadmin"
+    #   - "D:/docker-volumes/phpmyadmin/sessions:/sessions"
+    #   - "D:/docker-volumes/phpmyadmin/uploads:/var/www/html/upload"
 
     networks:
       - applicationNetwork

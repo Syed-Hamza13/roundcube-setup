@@ -5,7 +5,7 @@ services:
     image: ghcr.io/docker-mailserver/docker-mailserver:latest
     container_name: mailserver
     hostname: mail.localhost           # Local LAN hostname for testing
-    domainname: localhost               # optional but helps Postfix config
+    # domainname: localhost               # optional but helps Postfix config
     env_file:
       - ./mailserver.env
 
