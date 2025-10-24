@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  mailserver:
+    image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    container_name: mailserver
+    hostname: mail.localhost           # Local LAN hostname for testing
+    domainname: localhost               # optional but helps Postfix config
+    env_file:
+      - ./mailserver.env
+
+    ports:
+      - "25:25"      # SMTP
+      - "143:143"    # IMAP (STARTTLS)
+      - "465:465"    # SMTPS (implicit TLS)
+      - "587:587"    # Submission (STARTTLS)
+      - "993:993"    # IMAPS (implicit TLS)
+
+    volumes:
+      - "D:/docker-volumes/mail-server/mail-data:/var/mail"
+      - "D:/docker-volumes/mail-server/mail-state:/var/mail-state"
+      - "D:/docker-volumes/mail-server/mail-logs:/var/log/mail"
+      - "D:/docker-volumes/mail-server/config:/tmp/docker-mailserver"
+      - "/etc/localtime:/etc/localtime:ro"
+
+    restart: always
+    stop_grace_period: 1m
+
+    healthcheck:
+      test: "ss --listening --ipv4 --tcp | grep --silent ':smtp' || exit 1"
+      timeout: 3s
+      retries: 3
+
+    networks:
+      - applicationNetwork
+
+networks:
+  applicationNetwork:
+    external: true

@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-server
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Kalilinux@1122 # set root password 
+      MYSQL_DATABASE: main_db
+      MYSQL_USER: roundcubeuser  # create a new user
+      MYSQL_PASSWORD: roundcube@1122 # set a password for new user
+    volumes:
+      - "D:/docker-volumes/mysql-db:/var/lib/mysql"
+    ports:
+      - "3306:3306" # Allow LAN access to MySQL
+    networks:
+      - applicationNetwork
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    depends_on:
+      - mysql
+    restart: always
+    ports:
+      - "8090:80" # Access via http://<your-host-ip>:8090
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+  
+    volumes:
+      - "D:/docker-volumes/phpmyadmin/config:/etc/phpmyadmin"
+      - "D:/docker-volumes/phpmyadmin/sessions:/sessions"
+      - "D:/docker-volumes/phpmyadmin/uploads:/var/www/html/upload"
+
+    networks:
+      - applicationNetwork
+
+networks:
+  applicationNetwork:
+    name: applicationNetwork
