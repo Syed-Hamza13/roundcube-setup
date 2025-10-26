@@ -4,10 +4,10 @@ services:
   mailserver:
     image: ghcr.io/docker-mailserver/docker-mailserver:latest
     container_name: mailserver
-    hostname: mail.localhost           # Local LAN hostname for testing
-    # domainname: localhost               # optional but helps Postfix config
+    hostname: mail.hamza.local           # Local LAN hostname for testing
+    domainname: hamza.local               # optional but helps Postfix config
     env_file:
-      - ./mailserver.env
+      - mailserver.env
 
     ports:
       - "25:25"      # SMTP
@@ -17,10 +17,10 @@ services:
       - "993:993"    # IMAPS (implicit TLS)
 
     volumes:
-      - "D:/docker-volumes/mail-server/mail-data:/var/mail"
-      - "D:/docker-volumes/mail-server/mail-state:/var/mail-state"
-      - "D:/docker-volumes/mail-server/mail-logs:/var/log/mail"
-      - "D:/docker-volumes/mail-server/config:/tmp/docker-mailserver"
+      - "mail-data:/var/mail"
+      - "mail-state:/var/mail-state"
+      - "mail-logs:/var/log/mail"
+      - "dms-config:/tmp/docker-mailserver"
       - "/etc/localtime:/etc/localtime:ro"
 
     restart: always
@@ -34,6 +34,12 @@ services:
     networks:
       - applicationNetwork
 
+volumes:
+  mail-data:
+  mail-state:
+  mail-logs:
+  dms-config:
+
 networks:
   applicationNetwork:
-    external: true
+    name: applicationNetwork
